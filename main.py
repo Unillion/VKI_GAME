@@ -1,0 +1,3 @@
+import MainWindowStart
+
+MainWindowStart.start()
