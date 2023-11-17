@@ -9,7 +9,7 @@ class Bandit(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
-        self.speed = 10
+        self.speed = 100
 
         self.gravity = 0.5
         self.direction = pygame.math.Vector2(0,0)
@@ -17,3 +17,6 @@ class Bandit(pygame.sprite.Sprite):
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
+
+    def update(self, x_Shift):
+        self.rect.x += x_Shift

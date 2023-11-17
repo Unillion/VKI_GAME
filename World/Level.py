@@ -82,12 +82,18 @@ class Level:
         player = self.player.sprite
         enemies = self.enemy.sprites()
 
+
+
         for enemy in enemies:
+            print(enemy.direction.y)
             enemy.apply_gravity()
             for sprite in self.tiles.sprites():
                 for enemy in enemies:
                     if sprite.rect.colliderect(enemy.rect):
+
                         if enemy.direction.y > 0:
+
+                            enemy.direction.y = 0
                             enemy.rect.bottom = sprite.rect.top
 
                         if enemy.direction.y < 0:
