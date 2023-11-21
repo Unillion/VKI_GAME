@@ -4,7 +4,7 @@ from World import Platform
 from entities.PlayerEntity import Player
 from entities.AngryEntity import Bandit
 from tiles import Tiles
-from tiles import TileUnderground
+from tiles import *
 
 class Level:
     def __init__(self, level_data, surface):
@@ -26,14 +26,32 @@ class Level:
                 x = column_index * tile_size
                 y = row_index * tile_size
                 if cell == "F":
-                    underground = TileUnderground((x,y), tile_size)
+                    underground = Tiles((x,y), tile_size)
                     self.tiles.add(underground)
+
+                if cell == 'L':
+                    vertical = TileGroundVerticalLeft((x,y), tile_size)
+                    self.tiles.add(vertical)
+
+                if cell == 'R':
+                    vertical = TileGroundVerticalRight((x,y), tile_size)
+                    self.tiles.add(vertical)
+
+                if cell == 'U':
+                    vertical = TileGroundVerticalLeftUp((x,y), tile_size)
+                    self.tiles.add(vertical)
+
+                if cell == 'I':
+                    vertical = TileGroundVerticalRightUp((x,y), tile_size)
+                    self.tiles.add(vertical)
+
+
 
                 if cell == 'E':
                     enemy_sprite = Bandit((x, y))
                     self.enemy.add(enemy_sprite)
                 if cell == 'X':
-                    tile = Tiles((x,y), tile_size)
+                    tile = TileUnderground((x,y), tile_size)
                     self.tiles.add(tile)
                 if cell == 'P':
                     player_sprite = Player((x,y))
