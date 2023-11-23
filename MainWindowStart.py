@@ -9,7 +9,6 @@ from ScreenGame.GameField import fade
 from ScreenGame.PauseMenu import drawPause
 from pygame import mixer
 
-
 pygame.init()
 
 screen = pygame.display.set_mode((W, H), pygame.RESIZABLE)
@@ -22,33 +21,86 @@ pygame.display.set_caption("The Dawn Of New World")
 
 clock = pygame.time.Clock()
 
+start_button = Buttons(100, 200, screen, pygame.image.load('assets/start_btn.png'))
+quit_button = Buttons(100, 400, screen, pygame.image.load('assets/quit_btn.png'))
+exit_ingame_button = Buttons(400, 400, screen, pygame.image.load('assets/quit_btn.png'))
+alpha = 255
+LevelOne = False
+LevelTwo = False
 
-def start():
-    running = True
-    level = Level(level_map1, screen)
+# 0 - 1 lvl
+# 1 - 2 lvl
+# 2 - 3 lvl
+# 3 = 4 lvl
 
-    menu = True
-    esc = False
-    level_choosing = False
+running = True
 
-    #mixer.music.load('assets/main_ost.mp3')
-    #mixer.music.play()
+menu = True
+esc = False
+level_choosing = False
 
-    alpha = 255
+buttons_of_levels = createButtonList(screen, images)
 
-    start_button = Buttons(100, 200, screen, pygame.image.load('assets/start_btn.png'))
-    quit_button = Buttons(100, 400, screen, pygame.image.load('assets/quit_btn.png'))
-    exit_ingame_button = Buttons(400, 400, screen, pygame.image.load('assets/quit_btn.png'))
+while running:
+    clock.tick(60)
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
 
-    buttons_of_levels = createButtonList(screen, images)
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                if not menu:
+                    if not esc:
+                        esc = True
+                    else:
+                        esc = False
 
-    while running:
-        clock.tick(60)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse = pygame.mouse.get_pos()
 
-        print(esc)
-        if menu and not esc:
+            if pygame.mouse.get_pressed()[0]:
+                if esc:
+                    if exit_ingame_button.rect.collidepoint(mouse):
+                        if LevelOne:
+                            LevelOne = False
+                        elif LevelTwo:
+                            LevelTwo = False
+                        esc = False
+                        menu = True
+
+
+                if menu and not esc:
+                    if level_choosing:
+                        for button in buttons_of_levels:
+                            if button.rect.collidepoint(mouse):
+                                if buttons_of_levels.index(button) == 0:
+                                    menu = False
+                                    level_choosing = False
+                                    LevelOne = True
+                                    level1 = Level(level_map1, screen)
+
+                                if buttons_of_levels.index(button) == 1:
+                                    menu = False
+                                    level_choosing = False
+                                    LevelTwo = True
+                                    level2 = Level(level_map2, screen)
+
+                                if buttons_of_levels.index(button) == 2:
+                                    level_choosing = False
+                                if buttons_of_levels.index(button) == 3:
+                                    level_choosing = False
+                    else:
+                        if start_button.rect.collidepoint(mouse):
+                            level_choosing = True
+                        elif quit_button.rect.collidepoint(mouse):
+                            pygame.quit()
+                            sys.exit()
+    if menu:
+        if not esc:
             if level_choosing:
                 drawMenu(screen, buttons_of_levels)
+
             else:
                 alpha = alpha - 2
                 start_button.draw()
@@ -57,58 +109,22 @@ def start():
 
                 pygame.mouse.set_visible(True)
                 screen.blit(bg, (0, 0))
-        elif not menu and not esc and not level_choosing:
 
-            mixer.music.stop()
-
-            screen.fill(WHITE)
-            pygame.mouse.set_visible(False)
-            level.run()
-            pygame.display.update()
-
-        elif not menu and esc:
+    else:
+        if esc:
             pygame.mouse.set_visible(True)
             drawPause(screen, exit_ingame_button)
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+        else:
+            if not level_choosing:
+                screen.fill(WHITE)
+                pygame.mouse.set_visible(False)
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    if not menu:
-                        if not esc:
-                            esc = True
-                        else:
-                            esc = False
+                if LevelOne:
+                    level1.run()
+                elif LevelTwo:
+                    level2.run()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse = pygame.mouse.get_pos()
+                pygame.display.update()
 
-                if pygame.mouse.get_pressed()[0]:
-                    if esc:
-                        if exit_ingame_button.rect.collidepoint(mouse):
-                            esc = False
-                            menu = True
-                    if menu and not esc:
-                        if level_choosing:
-                            for button in buttons_of_levels:
-                                if button.rect.collidepoint(mouse):
-                                    if buttons_of_levels.index(button) == 0:
-                                        menu = False
-                                        level_choosing = False
-                                    if buttons_of_levels.index(button) == 1:
-                                        level_choosing = False
-                                    if buttons_of_levels.index(button) == 2:
-                                        level_choosing = False
-                                    if buttons_of_levels.index(button) == 3:
-                                        level_choosing = False
-                        else:
-                            if start_button.rect.collidepoint(mouse):
-                                print("pressed")
-                                level_choosing = True
-                            elif quit_button.rect.collidepoint(mouse):
-                                print('quitted')
-                                pygame.quit()
-                                sys.exit()
+

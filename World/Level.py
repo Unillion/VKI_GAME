@@ -103,7 +103,6 @@ class Level:
 
 
         for enemy in enemies:
-            print(enemy.direction.y)
             enemy.apply_gravity()
             for sprite in self.tiles.sprites():
                 for enemy in enemies:
@@ -130,7 +129,6 @@ class Level:
                     player.rect.top = sprite.rect.bottom
 
     def run(self):
-
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
         self.scroll_x()

@@ -37,7 +37,6 @@ class Player(pygame.sprite.Sprite):
         self.rect.y += self.direction.y
 
     def jump(self):
-        print(self.double_jump)
         if self.isJumped:
             pass
         else:
