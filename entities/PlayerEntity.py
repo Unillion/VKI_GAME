@@ -1,5 +1,6 @@
 from Settings import *
 from World.Level import *
+import random
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -9,6 +10,10 @@ class Player(pygame.sprite.Sprite):
         #self.image = pygame.image.load('assets/sprite.png')
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
+        self.health = 3
+        self.damage_cd = False
+        self.died = False
+
 
         #движение
         self.gravity = 0.5
@@ -20,7 +25,6 @@ class Player(pygame.sprite.Sprite):
 
     def get_input(self):
         keys = pygame.key.get_pressed()
-        mouse = pygame.mouse.get_pressed()
 
         if keys[pygame.K_a]:
             self.direction.x = -5
@@ -30,23 +34,24 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
 
         if keys[pygame.K_SPACE]:
-            self.jump()
+            if not self.isJumped:
+                self.jump()
 
     def apply_gravity(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
 
     def jump(self):
-        if self.isJumped:
-            pass
-        else:
-            self.direction.y = self.jump_speed
-            self.double_jump = self.double_jump + 1
+        self.direction.y = self.jump_speed
+        self.isJumped = True
 
-            if self.double_jump >= 2:
-                self.isJumped = True
-                self.double_jump = 0
+    def out_of_hp(self, screen):
+        img = pygame.transform.scale(pygame.image.load('assets/game_over.png'), (W,H))
+        self.died = True
+
+        screen.blit(img, (0,0))
 
 
     def update(self):
-        self.get_input()
+        if not self.died:
+            self.get_input()

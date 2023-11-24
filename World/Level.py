@@ -45,8 +45,6 @@ class Level:
                     vertical = TileGroundVerticalRightUp((x,y), tile_size)
                     self.tiles.add(vertical)
 
-
-
                 if cell == 'E':
                     enemy_sprite = Bandit((x, y))
                     self.enemy.add(enemy_sprite)
@@ -80,6 +78,21 @@ class Level:
             enemy.rect.x += enemy.direction.x * enemy.speed
             for sprite in self.tiles.sprites():
                 for enemy in enemies:
+
+                    if enemy.rect.colliderect(player.rect):
+                        if not player.damage_cd:
+                            player.health = player.health - 1
+                            player.damage_cd = True
+
+                        else:
+                            pygame.time.set_timer(pygame.USEREVENT, 20)
+
+                            for e in pygame.event.get():
+                                if e.type == pygame.USEREVENT:
+                                    player.damage_cd  = False
+
+
+
                     if sprite.rect.colliderect(enemy.rect):
                         if enemy.direction.x < 0:
                             enemy.rect.left = sprite.rect.right
@@ -89,23 +102,24 @@ class Level:
         player.rect.x += player.direction.x * player.speed
 
         for sprite in self.tiles.sprites():
-
-            if sprite.rect.colliderect(player.rect):
-                if player.direction.x < 0:
-                    player.rect.left = sprite.rect.right
-                elif player.direction.x > 0:
-                    player.rect.right = sprite.rect.left
+            for e in enemies:
+                if sprite.rect.colliderect(player.rect) and e.rect.colliderect(player.rect):
+                    if player.direction.x < 0:
+                        player.rect.left = sprite.rect.right
+                    elif player.direction.x > 0:
+                        player.rect.right = sprite.rect.left
 
     def vertical_movement_collide(self):
         player = self.player.sprite
         enemies = self.enemy.sprites()
 
-
-
         for enemy in enemies:
             enemy.apply_gravity()
             for sprite in self.tiles.sprites():
                 for enemy in enemies:
+
+
+
                     if sprite.rect.colliderect(enemy.rect):
 
                         if enemy.direction.y > 0:
@@ -129,6 +143,16 @@ class Level:
                     player.rect.top = sprite.rect.bottom
 
     def run(self):
+        hp = self.player.sprite.health
+        x = 10
+        y = 10
+
+        for i in range(hp):
+            x += 50
+            self.display_surface.blit(pygame.image.load('assets/heart.png'), (x,y))
+
+
+
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
         self.scroll_x()
@@ -138,3 +162,5 @@ class Level:
         self.horizontal_movement_collide()
         self.vertical_movement_collide()
         self.player.draw(self.display_surface)
+        if self.player.sprite.health <= 0:
+            self.player.sprite.out_of_hp(self.display_surface)
