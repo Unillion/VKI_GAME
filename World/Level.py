@@ -5,6 +5,7 @@ from entities.PlayerEntity import Player
 from entities.AngryEntity import Bandit
 from tiles import Tiles
 from tiles import *
+from World.EnemyFrame import *
 from utils.manageLevelAcess import *
 
 class Level:
@@ -17,6 +18,7 @@ class Level:
 
 
     def setup_level(self,layout):
+        self.enemy_frame = pygame.sprite.Group()
         self.enemy = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
@@ -31,6 +33,10 @@ class Level:
 
                 x = column_index * tile_size
                 y = row_index * tile_size
+                if cell == "G":
+                    frame = EnemyFrame((x,y), tile_size)
+                    self.enemy_frame.add(frame)
+
                 if cell == "F":
                     underground = Tiles((x,y), tile_size)
                     self.tiles.add(underground)
@@ -77,6 +83,7 @@ class Level:
             self.world_shift = 0
             player.speed = 1
 
+
     def horizontal_movement_collide(self):
         player = self.player.sprite
         enemies = self.enemy.sprites()
@@ -84,28 +91,29 @@ class Level:
         for enemy in enemies:
             enemy.rect.x += enemy.direction.x * enemy.speed
             for sprite in self.tiles.sprites():
-                for enemy in enemies:
+                if enemy.rect.colliderect(player.rect):
+                    if not player.damage_cd:
+                        player.health = player.health - 1
+                        player.direction.x -= 15
+                        player.damage_cd = True
 
-                    if enemy.rect.colliderect(player.rect):
-                        if not player.damage_cd:
-                            player.health = player.health - 1
-                            player.direction.x -= 15
-                            player.damage_cd = True
+                    else:
+                        pygame.time.set_timer(pygame.USEREVENT, 20)
 
-                        else:
-                            pygame.time.set_timer(pygame.USEREVENT, 20)
+                        for e in pygame.event.get():
+                            if e.type == pygame.USEREVENT:
+                                player.damage_cd = False
 
-                            for e in pygame.event.get():
-                                if e.type == pygame.USEREVENT:
-                                    player.damage_cd = False
+                if sprite.rect.colliderect(enemy.rect):
+                    enemy.rotate_direction()
+                    if enemy.direction.x < 0:
+                        enemy.rect.left = sprite.rect.right
+                    if enemy.direction.x > 0:
+                        enemy.rect.right = sprite.rect.left
 
-
-
-                    if sprite.rect.colliderect(enemy.rect):
-                        if enemy.direction.x < 0:
-                            enemy.rect.left = sprite.rect.right
-                        if enemy.direction.x > 0:
-                            enemy.rect.right = sprite.rect.left
+                for frame in self.enemy_frame.sprites():
+                    if enemy.rect.colliderect(frame.rect):
+                        enemy.rotate_direction()
 
         player.rect.x += player.direction.x * player.speed
 
@@ -175,8 +183,13 @@ class Level:
             x += 50
             self.display_surface.blit(pygame.image.load('assets/heart.png'), (x,y))
 
+        for e in self.enemy:
+            e.move_enemy()
+
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
+        self.enemy_frame.update(self.world_shift)
+        self.enemy_frame.draw(self.display_surface)
         self.scroll_x()
         self.player.update()
         self.enemy.update(self.world_shift)

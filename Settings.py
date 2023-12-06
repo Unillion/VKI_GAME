@@ -1,16 +1,16 @@
 import pygame
 
 level_map1 = [
-'                                                                                                            ',
-'                                                                                                            ',
-'                                                                                                            ',
-' UI                             X                                                                      ',
-' LRP                               X                                  X                                  ',
-' LXFIE                     UFFI                                                                           ',
-'UXXXXFI     UFFFI        UFXXXXFFFFFFFFI                  XXX       XXX                                 ',
-'LXXXXXXFFFFFFXXXXXFI   UFFXXFFFFFFFXXXXXXFFFFFFFFFFFFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'L                       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                          ',
+'L                                                                                                           ',
+'L                                                                                                           ',
+'LUI                                  X                                                                      ',
+'LLRP                               X                                  X                                     ',
+'LLXFIE     G  E  G    UFFI                                                                                  ',
+'UXXXXFI     UFFFI        UFXXXXFFFFFFFFI                  XXX       XXX                                     ',
+'LXXXXXXFFFFFFXXXXXFI   UFFXXFFFFFFFXXXXXXFFFFFFFFFFFFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'LXXXXXXXX  XXXXXXXXXI  LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 
 level_map2 = [
