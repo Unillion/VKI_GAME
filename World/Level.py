@@ -5,19 +5,25 @@ from entities.PlayerEntity import Player
 from entities.AngryEntity import Bandit
 from tiles import Tiles
 from tiles import *
+from utils.manageLevelAcess import *
 
 class Level:
-    def __init__(self, level_data, surface):
+    def __init__(self, level_data, surface, level_num):
         self.display_surface = surface
         self.setup_level(level_data)
+        self.level_num = level_num
 
         self.world_shift = 0
+
 
     def setup_level(self,layout):
         self.enemy = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
+
+        self.enemy_count = 0
+        self.won_lvl = False
 
         for row_index, row in enumerate(layout):
             for column_index, cell in enumerate(row):
@@ -48,6 +54,7 @@ class Level:
                 if cell == 'E':
                     enemy_sprite = Bandit((x, y))
                     self.enemy.add(enemy_sprite)
+                    self.enemy_count += 1
                 if cell == 'X':
                     tile = TileUnderground((x,y), tile_size)
                     self.tiles.add(tile)
@@ -82,6 +89,7 @@ class Level:
                     if enemy.rect.colliderect(player.rect):
                         if not player.damage_cd:
                             player.health = player.health - 1
+                            player.direction.x -= 15
                             player.damage_cd = True
 
                         else:
@@ -89,7 +97,7 @@ class Level:
 
                             for e in pygame.event.get():
                                 if e.type == pygame.USEREVENT:
-                                    player.damage_cd  = False
+                                    player.damage_cd = False
 
 
 
@@ -102,8 +110,7 @@ class Level:
         player.rect.x += player.direction.x * player.speed
 
         for sprite in self.tiles.sprites():
-            for e in enemies:
-                if sprite.rect.colliderect(player.rect) and e.rect.colliderect(player.rect):
+                if sprite.rect.colliderect(player.rect):
                     if player.direction.x < 0:
                         player.rect.left = sprite.rect.right
                     elif player.direction.x > 0:
@@ -117,9 +124,6 @@ class Level:
             enemy.apply_gravity()
             for sprite in self.tiles.sprites():
                 for enemy in enemies:
-
-
-
                     if sprite.rect.colliderect(enemy.rect):
 
                         if enemy.direction.y > 0:
@@ -142,6 +146,26 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
 
+    def check_enemy_collision(self):
+        enemy_collision = pygame.sprite.spritecollide(self.player.sprite, self.enemy, False)
+
+        if enemy_collision:
+            for enemy in enemy_collision:
+                enemy_center = enemy.rect.centery
+                enemy_top = enemy.rect.top
+
+                player_bottom = self.player.sprite.rect.bottom
+
+                if enemy_top < player_bottom < enemy_center and self.player.sprite.direction.y >= 0:
+                    self.player.sprite.direction.y = -15
+                    enemy.kill()
+                    self.enemy_count -= 1
+
+                    if self.enemy_count <= 0:
+                        if get_level('assets/data.txt') < self.level_num:
+                            write_completed_lvl('assets/data.txt')
+                        self.won_lvl = True
+
     def run(self):
         hp = self.player.sprite.health
         x = 10
@@ -150,8 +174,6 @@ class Level:
         for i in range(hp):
             x += 50
             self.display_surface.blit(pygame.image.load('assets/heart.png'), (x,y))
-
-
 
         self.tiles.update(self.world_shift)
         self.tiles.draw(self.display_surface)
@@ -162,5 +184,10 @@ class Level:
         self.horizontal_movement_collide()
         self.vertical_movement_collide()
         self.player.draw(self.display_surface)
+        self.check_enemy_collision()
+
         if self.player.sprite.health <= 0:
             self.player.sprite.out_of_hp(self.display_surface)
+
+        if self.won_lvl:
+            self.display_surface.blit(pygame.image.load('assets/win.png'), (0, 0))

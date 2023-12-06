@@ -7,6 +7,7 @@ from World.Level import Level
 from ScreenGame.LevelChooseMenu.LvlChose import *
 from ScreenGame.GameField import fade
 from ScreenGame.PauseMenu import drawPause
+from utils.manageLevelAcess import *
 from pygame import mixer
 
 pygame.init()
@@ -27,6 +28,8 @@ exit_ingame_button = Buttons(400, 400, screen, pygame.image.load('assets/quit_bt
 alpha = 255
 LevelOne = False
 LevelTwo = False
+LevelThree = False
+LevelFour = False
 
 # 0 - 1 lvl
 # 1 - 2 lvl
@@ -74,17 +77,17 @@ while running:
                     if level_choosing:
                         for button in buttons_of_levels:
                             if button.rect.collidepoint(mouse):
-                                if buttons_of_levels.index(button) == 0:
+                                if buttons_of_levels.index(button) == 0 and get_level('assets/data.txt') >= 0:
                                     menu = False
                                     level_choosing = False
                                     LevelOne = True
-                                    level1 = Level(level_map1, screen)
+                                    level1 = Level(level_map1, screen, 1)
 
-                                if buttons_of_levels.index(button) == 1:
+                                if buttons_of_levels.index(button) == 1 and get_level('assets/data.txt') >= 1:
                                     menu = False
                                     level_choosing = False
                                     LevelTwo = True
-                                    level2 = Level(level_map2, screen)
+                                    level2 = Level(level_map2, screen, 2)
 
                                 if buttons_of_levels.index(button) == 2:
                                     level_choosing = False
@@ -122,7 +125,7 @@ while running:
 
                 if LevelOne:
                     level1.run()
-                elif LevelTwo:
+                elif LevelTwo and get_level('assets/data.txt') < 2:
                     level2.run()
 
                 pygame.display.update()
