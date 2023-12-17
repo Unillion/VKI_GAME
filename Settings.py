@@ -6,7 +6,7 @@ level_map1 = [
 'L                                                                                                           ',
 'LUI                                  X                                                                      ',
 'LLRP                               X                                  X                                     ',
-'LLXFIE     G  E  G    UFFI                                                                                  ',
+'LLXFIE     G  E  G                                                                                      ',
 'UXXXXFI     UFFFI        UFXXXXFFFFFFFFI                  XXX       XXX                                     ',
 'LXXXXXXFFFFFFXXXXXFI   UFFXXFFFFFFFXXXXXXFFFFFFFFFFFFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'LXXXXXXXX  XXXXXXXXXI  LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
@@ -26,8 +26,34 @@ level_map2 = [
 'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 
+level_map3 = [
+'                                                                                                            ',
+'                                                                                                            ',
+'                                                                                                            ',
+' UI        XXXXXXXXXXX                      X                                                                      ',
+' LRP                               X                                  X                                  ',
+' LXFIE                     UFFI                                                                           ',
+'UXXXXFI      UFFFI        UFXXXXFFFFFFFFI                  XXX       XXX                                 ',
+'LXXXXXXFFFFFFXXXXXFI   UFFXXFFFFFFFXXXXXXFFFFFFFFFFFFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXX  XXXXXXXXXI  LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 
-levels = [level_map1, level_map2]
+level_map4 = [
+'                                                                                                            ',
+'                                                                                                            ',
+'                                                                                                            ',
+' UI        XXXXXXXXXXX                      X                                                                      ',
+' LRP                               X                                  X                                  ',
+' LXFIE  V                 UFFI                                                                          ',
+'UXXXXFI      UFFFI        UFXXXXFFFFFFFFI       E          XXX       XXX                                 ',
+'LXXXXXXFFFFFFXXXXXFI   UFFXXFFFFFFFXXXXXXFFFFFFFFFFFFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXX  XXXXXXXXXI  LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
+
+
+levels = [level_map1, level_map2, level_map3, level_map4]
 
 def getLevel(index):
     return levels[index]

@@ -7,21 +7,51 @@ from tiles import Tiles
 from tiles import *
 from World.EnemyFrame import *
 from utils.manageLevelAcess import *
+from World.EndGemClass import *
+from World import Particle
 
 class Level:
-    def __init__(self, level_data, surface, level_num):
+    def __init__(self, level_data, surface, level_num, menu):
         self.display_surface = surface
         self.setup_level(level_data)
         self.level_num = level_num
+        self.menu = menu
+        self.x = 0
 
         self.world_shift = 0
+        self.particle = pygame.sprite.GroupSingle()
 
+        self.player_on_ground = True
+
+
+    def render_jump_particle(self, pos):
+        jump_particle = Particle.ParticleEffect(pos, 'jump')
+        self.particle.add(jump_particle)
+
+    '''def get_player_on_ground(self):
+        if self.player.sprite.ground:
+            self.player_on_ground = True
+        else:
+            self.player_on_ground = False'''
+
+    def create_landing_dust(self):
+        #if not self.player_on_ground and self.player.sprite.ground and self.particle.sprite:
+            if self.player_on_ground != self.player.sprite.ground or self.player.sprite.celling:
+                if self.player.sprite.groups():
+
+                    if self.player.sprite.right:
+                        offset = pygame.math.Vector2(10, 15)
+                    else:
+                        offset = pygame.math.Vector2(-10, 15)
+                    fall_dust_particle = Particle.ParticleEffect(self.player.sprite.rect.midbottom - offset, 'land')
+                    self.particle.add(fall_dust_particle)
 
     def setup_level(self,layout):
         self.enemy_frame = pygame.sprite.Group()
         self.enemy = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
+        self.gems = pygame.sprite.Group()
 
 
         self.enemy_count = 0
@@ -33,6 +63,7 @@ class Level:
 
                 x = column_index * tile_size
                 y = row_index * tile_size
+
                 if cell == "G":
                     frame = EnemyFrame((x,y), tile_size)
                     self.enemy_frame.add(frame)
@@ -65,9 +96,11 @@ class Level:
                     tile = TileUnderground((x,y), tile_size)
                     self.tiles.add(tile)
                 if cell == 'P':
-                    player_sprite = Player((x,y))
+                    player_sprite = Player((x,y), self.display_surface, self.render_jump_particle)
                     self.player.add(player_sprite)
-
+                if cell == "V":
+                    gem = EndGem((x,y), tile_size)
+                    self.gems.add(gem)
 
     def scroll_x(self):
         player = self.player.sprite
@@ -84,13 +117,21 @@ class Level:
             player.speed = 1
 
 
-    def horizontal_movement_collide(self):
+    def horizontal_movement_collide(self, menu):
         player = self.player.sprite
         enemies = self.enemy.sprites()
+        gems = self.gems.sprites()
+
 
         for enemy in enemies:
             enemy.rect.x += enemy.direction.x * enemy.speed
             for sprite in self.tiles.sprites():
+                if self.level_num == 4:
+                    for gem in gems:
+                        if player.rect.colliderect(gem.rect):
+                            menu = True
+                            print('game over')
+
                 if enemy.rect.colliderect(player.rect):
                     if not player.damage_cd:
                         player.health = player.health - 1
@@ -121,12 +162,24 @@ class Level:
                 if sprite.rect.colliderect(player.rect):
                     if player.direction.x < 0:
                         player.rect.left = sprite.rect.right
+                        player.left = True
+                        self.x = player.rect.left
                     elif player.direction.x > 0:
                         player.rect.right = sprite.rect.left
+                        player.right = True
+                        self.x = player.rect.right
+
+        if player.left and (player.rect.left < self.x or player.direction.x >= 0):
+            player.left = False
+        if player.right and (player.rect.right > self.x or player.direction.x <= 0):
+            player.right = False
+        return menu
+
 
     def vertical_movement_collide(self):
         player = self.player.sprite
         enemies = self.enemy.sprites()
+        self.player_on_ground = player.ground
 
         for enemy in enemies:
             enemy.apply_gravity()
@@ -149,10 +202,21 @@ class Level:
                 if player.direction.y > 0:
                     player.direction.y = 0
                     player.rect.bottom = sprite.rect.top
+                    player.ground = True
+
 
                     player.isJumped = player.isJumped = False
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
+                    player.celling = True
+
+            else:
+                player.celling = False
+        if player.ground and player.direction.y < 0 or player.direction.y > 1:
+            player.ground = False
+        if player.celling and player.direction.y > 0.1:
+            player.celling = False
+
 
     def check_enemy_collision(self):
         enemy_collision = pygame.sprite.spritecollide(self.player.sprite, self.enemy, False)
@@ -171,17 +235,16 @@ class Level:
 
                     if self.enemy_count <= 0:
                         if get_level('assets/data.txt') < self.level_num:
-                            write_completed_lvl('assets/data.txt')
-                        self.won_lvl = True
+                            if get_level('assets/data.txt') != 3:
+                                write_completed_lvl('assets/data.txt')
+                                self.won_lvl = True
 
     def run(self):
         hp = self.player.sprite.health
         x = 10
         y = 10
 
-        for i in range(hp):
-            x += 50
-            self.display_surface.blit(pygame.image.load('assets/heart.png'), (x,y))
+
 
         for e in self.enemy:
             e.move_enemy()
@@ -194,13 +257,24 @@ class Level:
         self.player.update()
         self.enemy.update(self.world_shift)
         self.enemy.draw(self.display_surface)
-        self.horizontal_movement_collide()
+        self.horizontal_movement_collide(self.menu)
         self.vertical_movement_collide()
         self.player.draw(self.display_surface)
+        #self.get_player_on_ground()
+        self.create_landing_dust()
         self.check_enemy_collision()
+        self.gems.update(self.world_shift)
+        self.gems.draw(self.display_surface)
+        self.particle.update(self.world_shift)
+        self.particle.draw(self.display_surface)
+
+        for gem in self.gems:
+            gem.render_particles(self.display_surface)
 
         if self.player.sprite.health <= 0:
             self.player.sprite.out_of_hp(self.display_surface)
-
+        for i in range(hp):
+            x += 50
+            self.display_surface.blit(pygame.image.load('assets/heart.png'), (x,y))
         if self.won_lvl:
             self.display_surface.blit(pygame.image.load('assets/win.png'), (0, 0))
