@@ -6,6 +6,7 @@ class EnemyFrame(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.Surface((size,size))
         self.image.fill('blue')
+        self.image.set_alpha(0)
         #self.image = pygame.image.load('assets/groundVerticalWIthGround.png')
         self.rect = self.image.get_rect()
         self.rect.topleft = pos

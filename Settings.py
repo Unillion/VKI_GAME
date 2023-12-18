@@ -1,15 +1,26 @@
 import pygame
 
+'''
+F - тропинка
+U - слева-вверз
+L - вверх
+I - слева-вниз
+P - игрок
+E - враг
+G - отталкиватель-врагов
+x - подземный блок
+
+'''
 level_map1 = [
-'L                       FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF                                          ',
-'L                                                                                                           ',
-'L                                                                                                           ',
-'LUI                                  X                                                                      ',
-'LLRP                               X                                  X                                     ',
-'LLXFIE     G  E  G                                                                                      ',
-'UXXXXFI     UFFFI        UFXXXXFFFFFFFFI                  XXX       XXX                                     ',
-'LXXXXXXFFFFFFXXXXXFI   UFFXXFFFFFFFXXXXXXFFFFFFFFFFFFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-'LXXXXXXXX  XXXXXXXXXI  LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'                                                                                                            ',
+'                                                                                                            ',
+'       G  E   G                                                                                             ',
+'        UFFFFI  G      E        G                                                                           ',
+'                 UFFFFFFFFFFFFFI         G     E    G                                                      ',
+'                                G  E   G  UFFFFFFFFI                 G     E       G                       ',
+'                                 UFFFFI               G   E      E  G UFFFFFFFFFFFI                                     ',
+'                       G  E    G                       UFFFFFFFFFFFI                                        ',
+'      P GE              UFFFFFI                                                                             ',
 'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
 'LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 

@@ -41,6 +41,7 @@ running = True
 menu = True
 esc = False
 level_choosing = False
+win = False
 
 buttons_of_levels = createButtonList(screen, images)
 
@@ -75,6 +76,7 @@ while running:
                         LevelOne, LevelTwo, LevelThree, LevelFour = disableAllLevels()
                         esc = False
                         menu = True
+                        win = False
 
 
                 if menu and not esc:
@@ -85,24 +87,24 @@ while running:
                                     menu = False
                                     level_choosing = False
                                     LevelOne = True
-                                    level1 = Level(level_map1, screen, 1, menu)
+                                    level1 = Level(level_map1, screen, 1, menu, win)
 
                                 if buttons_of_levels.index(button) == 1 and get_level('assets/data.txt') >= 1:
                                     menu = False
                                     level_choosing = False
                                     LevelTwo = True
-                                    level2 = Level(level_map2, screen, 2, menu)
+                                    level2 = Level(level_map2, screen, 2, menu, win)
 
                                 if buttons_of_levels.index(button) == 2 and get_level('assets/data.txt') >= 2:
                                     menu = False
                                     level_choosing = False
                                     LevelThree = True
-                                    level3 = Level(level_map3, screen, 3, menu)
+                                    level3 = Level(level_map3, screen, 3, menu, win)
                                 if buttons_of_levels.index(button) == 3 and get_level('assets/data.txt') >= 3:
                                     menu = False
                                     level_choosing = False
                                     LevelFour = True
-                                    level4 = Level(level_map4, screen, 4, menu)
+                                    level4 = Level(level_map4, screen, 4, menu, win)
                     else:
                         if start_button.rect.collidepoint(mouse):
                             level_choosing = True
@@ -124,9 +126,11 @@ while running:
                 screen.blit(bg, (0, 0))
 
     else:
+
         if esc:
             pygame.mouse.set_visible(True)
             drawPause(screen, exit_ingame_button)
+
 
         else:
             if not level_choosing:
@@ -140,8 +144,13 @@ while running:
                 if LevelThree and get_level('assets/data.txt') >= 2:
                     level3.run()
                 elif LevelFour and get_level('assets/data.txt') >= 3:
-                    level4.run()
+                   win = level4.run()
 
-                pygame.display.update()
+            if win:
+                screen.blit(pygame.image.load('assets/win.png'), (0, 0))
+
+            pygame.display.update()
+
+
 
 

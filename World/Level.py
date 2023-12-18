@@ -11,11 +11,12 @@ from World.EndGemClass import *
 from World import Particle
 
 class Level:
-    def __init__(self, level_data, surface, level_num, menu):
+    def __init__(self, level_data, surface, level_num, menu, win):
         self.display_surface = surface
         self.setup_level(level_data)
         self.level_num = level_num
         self.menu = menu
+        self.win = win
         self.x = 0
 
         self.world_shift = 0
@@ -27,12 +28,6 @@ class Level:
     def render_jump_particle(self, pos):
         jump_particle = Particle.ParticleEffect(pos, 'jump')
         self.particle.add(jump_particle)
-
-    '''def get_player_on_ground(self):
-        if self.player.sprite.ground:
-            self.player_on_ground = True
-        else:
-            self.player_on_ground = False'''
 
     def create_landing_dust(self):
         #if not self.player_on_ground and self.player.sprite.ground and self.particle.sprite:
@@ -128,8 +123,8 @@ class Level:
             for sprite in self.tiles.sprites():
                 if self.level_num == 4:
                     for gem in gems:
-                        if player.rect.colliderect(gem.rect):
-                            menu = True
+                        if player.rect.colliderect(gem.rect) and self.enemy_count == 0:
+                            self.win = True
                             print('game over')
 
                 if enemy.rect.colliderect(player.rect):
@@ -152,9 +147,9 @@ class Level:
                     if enemy.direction.x > 0:
                         enemy.rect.right = sprite.rect.left
 
-                for frame in self.enemy_frame.sprites():
-                    if enemy.rect.colliderect(frame.rect):
-                        enemy.rotate_direction()
+            for frame in self.enemy_frame.sprites():
+                if enemy.rect.colliderect(frame.rect):
+                    enemy.rotate_direction()
 
         player.rect.x += player.direction.x * player.speed
 
@@ -237,9 +232,15 @@ class Level:
                         if get_level('assets/data.txt') < self.level_num:
                             if get_level('assets/data.txt') != 3:
                                 write_completed_lvl('assets/data.txt')
-                                self.won_lvl = True
+                        self.won_lvl = True
+
+    def draw_bg(self, screen):
+        if self.level_num == 1:
+            screen.blit(pygame.image.load('assets/menu_background.png'), (0,0))
 
     def run(self):
+        self.draw_bg(self.display_surface)
+
         hp = self.player.sprite.health
         x = 10
         y = 10
@@ -268,9 +269,6 @@ class Level:
         self.particle.update(self.world_shift)
         self.particle.draw(self.display_surface)
 
-        for gem in self.gems:
-            gem.render_particles(self.display_surface)
-
         if self.player.sprite.health <= 0:
             self.player.sprite.out_of_hp(self.display_surface)
         for i in range(hp):
@@ -278,3 +276,4 @@ class Level:
             self.display_surface.blit(pygame.image.load('assets/heart.png'), (x,y))
         if self.won_lvl:
             self.display_surface.blit(pygame.image.load('assets/win.png'), (0, 0))
+        return self.win

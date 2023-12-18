@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
 
         #движение
         self.gravity = 0.5
-        self.jump_speed = -10
+        self.jump_speed = -15
         self.double_jump = 0
         self.isJumped = False
         self.speed = 100

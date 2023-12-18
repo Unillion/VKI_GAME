@@ -10,8 +10,7 @@ class EndGem(pygame.sprite.Sprite):
     def __init__(self, pos, size):
         super().__init__()
         self.pos = pos
-        self.image = pygame.Surface((size, size))
-        self.image.fill('white')
+        self.image = pygame.image.load('assets/end_gem.png')
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
 
