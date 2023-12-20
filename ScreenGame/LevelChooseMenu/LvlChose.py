@@ -2,13 +2,13 @@ import pygame
 from Button import Buttons
 from Settings import *
 from utils import manageLevelAcess
+
 pygame.init()
 
 images = [pygame.image.load('assets/level_one.png'),
-            pygame.image.load('assets/level_two.png'),
-            pygame.image.load('assets/level_three.png'),
-            pygame.image.load('assets/level_four.png')]
-
+          pygame.image.load('assets/level_two.png'),
+          pygame.image.load('assets/level_three.png'),
+          pygame.image.load('assets/level_four.png')]
 
 
 def createButtonList(screen, images):
@@ -29,13 +29,11 @@ def createButtonList(screen, images):
 
 def drawMenu(screen, listOfButtons):
     surface = pygame.Surface((H * 2, W * 2))
-    surface.fill((0,0,0))
+    surface.fill((0, 0, 0))
 
-    screen.blit(surface, (0,0))
+    screen.blit(surface, (0, 0))
 
     for button in listOfButtons:
         button.draw()
 
     pygame.display.update()
-
-
