@@ -238,12 +238,12 @@ class Level:
                                 write_completed_lvl('assets/data.txt')
                         self.won_lvl = True
 
-    def draw_bg(self, screen):
-        if self.level_num == 1:
-            screen.blit(pygame.image.load('assets/menu_background.png'), (0,0))
+    #def draw_bg(self, screen):
+        #if self.level_num == 1:
+            #screen.blit(pygame.image.load('assets/menu_background.png'), (0,0))
 
     def run(self):
-        self.draw_bg(self.display_surface)
+        #self.draw_bg(self.display_surface)
 
         hp = self.player.sprite.health
         x = 10

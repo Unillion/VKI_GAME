@@ -13,7 +13,7 @@ from pygame import mixer
 
 pygame.init()
 
-screen = pygame.display.set_mode((W, H), pygame.RESIZABLE)
+screen = pygame.display.set_mode((W, H), pygame.FULLSCREEN | pygame.DOUBLEBUF)
 
 bg = pygame.image.load('assets/menu_background.png')
 bg = pygame.transform.scale(bg, (W, H))
