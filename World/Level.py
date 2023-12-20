@@ -59,6 +59,10 @@ class Level:
                 x = column_index * tile_size
                 y = row_index * tile_size
 
+                if cell == "B":
+                    barrier = Barrier((x,y), tile_size)
+                    self.tiles.add(barrier)
+
                 if cell == "G":
                     frame = EnemyFrame((x,y), tile_size)
                     self.enemy_frame.add(frame)

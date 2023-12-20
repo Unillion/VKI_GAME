@@ -12,16 +12,16 @@ x - подземный блок
 
 '''
 level_map1 = [
-'                                                                                                            ',
-'                                                                                                            ',
-'       G  E   G                                                                                             ',
-'        UFFFFI  G      E        G                                                                           ',
-'                 UFFFFFFFFFFFFFI         G     E    G                                                      ',
-'                                G  E   G  UFFFFFFFFI                 G     E       G                       ',
-'                                 UFFFFI               G   E      E  G UFFFFFFFFFFFI                                     ',
-'                       G  E    G                       UFFFFFFFFFFFI                                        ',
-'      P GE              UFFFFFI                                                                             ',
-'LXXXXXXXXXXXXXXXXXXXXFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
+'BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
+'B                                                                                                          B',
+'B      G  E   G                                                                                            B',
+'B       UFFFFI  G      E        G                                                                          B',
+'B                UFFFFFFFFFFFFFI         G     E    G                                                      B',
+'B                               G  E   G  UFFFFFFFFI                 G     E       G                       B',
+'B                                UFFFFI               G   E      E  G UFFFFFFFFFFFI                        B',
+'B       G  E                          G                UFFFFFFFFFFFI                                       B',
+'B     P  UFFFFFFFFFFFFFFFFFFFFFFFFFFFI                                                                     B',
+'UFFFFFFFFXXXXXXXXXXXXXXXXXXXXXXXXXXXXXFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF',
 'LXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX']
 
 level_map2 = [
