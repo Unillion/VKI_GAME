@@ -28,10 +28,6 @@ def createButtonList(screen, images):
 
 
 def drawMenu(screen, listOfButtons):
-    surface = pygame.Surface((H * 2, W * 2))
-    surface.fill((0, 0, 0))
-
-    screen.blit(surface, (0, 0))
 
     for button in listOfButtons:
         button.draw()

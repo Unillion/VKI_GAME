@@ -48,10 +48,10 @@ class Player(pygame.sprite.Sprite):
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
-            self.direction.x = -5
+            self.direction.x = -9
             self.facing = False
         elif keys[pygame.K_d]:
-            self.direction.x = 5
+            self.direction.x = 9
             self.facing = True
         else:
             self.direction.x = 0
@@ -77,10 +77,16 @@ class Player(pygame.sprite.Sprite):
             self.animations[animation] = utils.import_folder(full_path)
 
     def out_of_hp(self, screen):
-        img = pygame.transform.scale(pygame.image.load('assets/game_over.png'), (W,H))
-        self.died = True
+        surface = pygame.Surface((1800, 1200))
+        surface.fill('black')
+        font = pygame.font.Font('assets/fonts/papyrus.ttf', 100)
+        text_died = font.render("You Died", True, 'red')
+        text_quit_to_menu = font.render("Press ESC to quit to the Menu", True, 'red')
 
-        screen.blit(img, (0,0))
+        screen.blit(surface, (0, 0))
+        screen.blit(text_died, (450, 200))
+        screen.blit(text_quit_to_menu, (20, 400))
+        self.died = True
 
     def get_player_state(self):
         if self.direction.y < 0:

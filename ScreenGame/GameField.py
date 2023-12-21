@@ -22,7 +22,6 @@ def fade(screen, alpha):
 
         screen.blit(fade, (0, 0))
 
-        pygame.display.update()
 
 
 

@@ -10,4 +10,3 @@ def drawPause(screen, button):
     pause.set_alpha(100)
     screen.blit(pause, (0,0))
     button.draw()
-    pygame.display.update()

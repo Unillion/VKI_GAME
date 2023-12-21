@@ -9,14 +9,37 @@ from ScreenGame.LevelChooseMenu.LvlChose import *
 from ScreenGame.GameField import fade
 from ScreenGame.PauseMenu import drawPause
 from utils.manageLevelAcess import *
+from utils.utils import *
 from pygame import mixer
 
 pygame.init()
+def render_menu(screen):
+    font = pygame.font.Font('assets/fonts/papyrus.ttf', 70)
+    text_game_name = font.render("The Pirate Bay!", True, 'white')
+
+    screen.blit(text_game_name, (560, 75))
+
+def render_game_completed(screen):
+    egg = pygame.transform.scale(loadTexture('danil_egg.png'), (128,128))
+    surface = pygame.Surface((1800, 1200))
+    surface.fill('black')
+    font = pygame.font.Font('assets/fonts/papyrus.ttf', 100)
+    text_level_completed = font.render("Game Completed!", True, 'yellow')
+    text_quit_to_menu = font.render("Press ESC to quit to the Menu", True, 'yellow')
+
+    screen.blit(surface, (0, 0))
+    screen.blit(egg, (550, 50))
+    screen.blit(text_level_completed, (300, 200))
+    screen.blit(text_quit_to_menu, (20, 400))
 
 screen = pygame.display.set_mode((W, H), pygame.FULLSCREEN | pygame.DOUBLEBUF)
 
-bg = pygame.image.load('assets/menu_background.png')
-bg = pygame.transform.scale(bg, (W, H))
+label = pygame.transform.scale(loadTexture('lable.png'), (564,128))
+
+bg = pygame.image.load('assets/backgrounds/menu_background.jpg')
+bg = pygame.transform.scale(bg, (W + 80, H + 10))
+bg2 = pygame.image.load('assets/backgrounds/level_level_background.jpg')
+bg2 = pygame.transform.scale(bg, (W + 80, H + 10))
 
 pygame.display.set_icon(pygame.image.load('assets/gameicon.png'))
 pygame.display.set_caption("The Dawn Of New World")
@@ -26,7 +49,8 @@ clock = pygame.time.Clock()
 start_button = Buttons(100, 150, screen, pygame.image.load('assets/start_btn.png'))
 file_help = Buttons(100, 300, screen, pygame.image.load('assets/help_btn.png'))
 quit_button = Buttons(100, 450, screen, pygame.image.load('assets/quit_btn.png'))
-quit_from_help = Buttons(W/2 - 100, 570, screen, pygame.image.load('assets/quit_btn.png'))
+quit_from_help = Buttons(W/2 + 250, 570, screen, pygame.image.load('assets/quit_btn.png'))
+help = pygame.transform.scale(utils.utils.loadTexture('help_file_for_popov.jpg'), (W + 20, H - 20))
 
 alpha = 255
 LevelOne = False
@@ -47,7 +71,6 @@ win = False
 helping = False
 
 buttons_of_levels = createButtonList(screen, images)
-
 
 def disableAllLevels():
     LevelOne = False
@@ -75,7 +98,6 @@ while running:
                     LevelOne, LevelTwo, LevelThree, LevelFour = disableAllLevels()
                     menu = True
                     win = False
-                    pygame.display.update()
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             mouse = pygame.mouse.get_pos()
@@ -87,24 +109,24 @@ while running:
                                 menu = False
                                 level_choosing = False
                                 LevelOne = True
-                                level1 = Level(level_map1, screen, 1, menu, win)
+                                level1 = Level(level_map1, screen, 1, menu)
 
                             if buttons_of_levels.index(button) == 1 and get_level('assets/data.txt') >= 1:
                                 menu = False
                                 level_choosing = False
                                 LevelTwo = True
-                                level2 = Level(level_map2, screen, 2, menu, win)
+                                level2 = Level(level_map2, screen, 2, menu)
 
                             if buttons_of_levels.index(button) == 2 and get_level('assets/data.txt') >= 2:
                                 menu = False
                                 level_choosing = False
                                 LevelThree = True
-                                level3 = Level(level_map3, screen, 3, menu, win)
+                                level3 = Level(level_map3, screen, 3, menu)
                             if buttons_of_levels.index(button) == 3 and get_level('assets/data.txt') >= 3:
                                 menu = False
                                 level_choosing = False
                                 LevelFour = True
-                                level4 = Level(level_map4, screen, 4, menu, win)
+                                level4 = Level(level_map4, screen, 4, menu)
                 else:
                     if helping:
                         if quit_from_help.rect.collidepoint(mouse):
@@ -120,21 +142,25 @@ while running:
                             sys.exit()
     if menu:
         if level_choosing:
+            screen.blit(bg2, (0,0))
             drawMenu(screen, buttons_of_levels)
 
         elif helping:
-            screen.blit(utils.utils.loadTexture('help_file_for_popov.jpg'), (0, 0))
+            screen.blit(pygame.transform.scale(help, (W, H)), (0, 0))
             quit_from_help.draw()
-            pygame.display.update()
         else:
             alpha = alpha - 2
+            screen.blit(bg, (0, 0))
+
+
+
+            screen.blit(label, (500, 50))
+            render_menu(screen)
             start_button.draw()
             quit_button.draw()
             file_help.draw()
             fade(screen, alpha)
-
             pygame.mouse.set_visible(True)
-            screen.blit(bg, (0, 0))
 
 
     else:
@@ -153,6 +179,6 @@ while running:
                 win = level4.run()
 
         if win:
-            screen.blit(pygame.image.load('assets/win.png'), (0, 0))
+            render_game_completed(screen)
 
-        pygame.display.update()
+    pygame.display.flip()
